@@ -4,11 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Sitio Web</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+        font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
     <h1>Bienvenido a Mi Sitio Web</h1>
     <p>Este es el inicio de nuestro proyecto.</p>
     <p>Seminario de Actualización DEV OPS</p>
+    <div class="bg-white p-8 rounded-x1 shadow-1g w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Crear Perfil</h2>
+        <form id="profileForm" class="space-y-4">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Nombre de Usuario</label>
+                <input type="text" id="username" name="username" placeholder="ingresa tu nombre de usuario" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder= "Ingresa tu Contraseña" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Enviar Datos
+            </button>
+        </form>
+    </div>
+    <script>
+        // Documentación de la llamada 
+        // La llamada AJAX (simulada con Fetech) enviará los siguientes paramatros:
+        // - username: string que contiene el nombre de usuario
+        // - password: string que contiene la contraseña del usuario
+        // Los datos se enviaran como JSON al endpoint ´backend.php´
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = 'Enviando datos...';
+            messageDiv.className = 'mt-4 p-3 text-center rounded-md bg-yellow-100 text-yellow-800 block';
+            // Simulación de llamada AJAX
+            // El'Backend' recibirá los datos en formato JSON
+            fetch('backend.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },  
+                body: JSON.stringify({ username, password })
+            })
+            .then(response =>{
+                if (!response.ok) {
+                    return (status: 'ok', message: 'Datos enviados correctamente');
+                } else {
+                    return {status: 'error', message: 'Error al enviar los datos' };
+                }
+            })
+            .then(data => {
+                // Se simula la respuesta del backend. En un escenario real
+                // aquí se procesaría la respuesta del servidor.
+                if (data.status === 'ok') {
+                    messageDiv.textContent = '!Datos enviados correctamente!';
+                    messageDiv.className = 'mt-4 p-3 text-center rounded-md bg-green-100 text-green-800 block';
+                } else {
+                    messageDiv.textContent = 'Hubo un error al enviar los datos. Intenta de nuevo.';
+                    messageDiv.className = 'mt-4 p-3 text-center rounded-md bg-red-100 text-red-800 block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                messageDiv.textContent = 'Hubo un problema de conexión. Intenta de nuevo.';
+                messageDiv.className = 'mt-4 p-3 text-center rounded-md bg-red-100 text-red-800 block';
+            });
+        });
+    </script>
 </body>
 </html>
